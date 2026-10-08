@@ -28,6 +28,25 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       required: false,
     },
+    stock: {
+      type: Number,
+      default: 50,
+      min: 0,
+    },
+    supplier: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
+    supplierName: {
+      type: String,
+      default: "Priyanka's Official Store",
+    },
+    status: {
+      type: String,
+      enum: ["approved", "pending", "rejected"],
+      default: "approved",
+    },
   },
   { timestamps: true, versionKey: false }
 );

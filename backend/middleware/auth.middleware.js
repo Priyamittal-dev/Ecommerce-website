@@ -48,6 +48,14 @@ export const adminRoute = async (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
-    return res.status(401).json({ message: "Access denied - Unauthorized" });
+    return res.status(401).json({ message: "Access denied - Admin only" });
+  }
+};
+
+export const supplierRoute = async (req, res, next) => {
+  if (req.user && (req.user.role === "supplier" || req.user.role === "admin")) {
+    next();
+  } else {
+    return res.status(401).json({ message: "Access denied - Supplier or Admin only" });
   }
 };

@@ -29,8 +29,17 @@ const userSchema = new mongoose.Schema(
     ],
     role: {
       type: String,
-      enum: ["customer", "admin"],
+      enum: ["customer", "supplier", "admin"],
       default: "customer",
+    },
+    supplierCompany: {
+      type: String,
+      default: "",
+    },
+    supplierStatus: {
+      type: String,
+      enum: ["approved", "pending", "rejected"],
+      default: "approved",
     },
   },
   { timestamps: true }

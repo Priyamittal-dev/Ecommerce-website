@@ -44,7 +44,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 };
 
 export const signup = async (req, res) => {
-	const { email, password, name } = req.body;
+	const { email, password, name, role, supplierCompany } = req.body;
 	try {
 		//logic to check !email, !name and !password length in the model
 		const userExists = await User.findOne({ email });
@@ -52,9 +52,16 @@ export const signup = async (req, res) => {
 		if (userExists) {
 			return res.status(400).json({ message: "User already exists" });
 		}
-		//password is hashed in the user model pre save hook, use create() instead of save()
-		//user does not exist, create a new user to the database
-		const user = await User.create({ name, email, password });
+		
+		const validRole = ["customer", "supplier", "admin"].includes(role) ? role : "customer";
+		const user = await User.create({
+			name,
+			email,
+			password,
+			role: validRole,
+			supplierCompany: validRole === "supplier" ? (supplierCompany || name + "'s Company") : "",
+			supplierStatus: "approved",
+		});
 
 		// authenticate
 		const { accessToken, refreshToken } = generateTokens(user._id);
@@ -68,6 +75,7 @@ export const signup = async (req, res) => {
 			name: user.name,
 			email: user.email,
 			role: user.role,
+			supplierCompany: user.supplierCompany,
 		});
 	} catch (error) {
 		console.log("Error in signup controller", error.message);
@@ -96,6 +104,7 @@ export const login = async (req, res) => {
 				name: user.name,
 				email: user.email,
 				role: user.role,
+				supplierCompany: user.supplierCompany,
 			});
 		} else {
 			res.status(400).json({ message: "Invalid email or password" });

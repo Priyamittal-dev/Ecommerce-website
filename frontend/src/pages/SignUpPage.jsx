@@ -10,6 +10,8 @@ const SignUpPage = () => {
 		email: "",
 		password: "",
 		confirmPassword: "",
+		role: "customer",
+		supplierCompany: "",
 	});
 
 	const { signup, loading } = useUserStore();
@@ -38,6 +40,55 @@ const SignUpPage = () => {
 			>
 				<div className='bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10'>
 					<form onSubmit={handleSubmit} className='space-y-6'>
+						<div>
+							<label className='block text-sm font-medium text-gray-300 mb-2'>
+								Select Account Type
+							</label>
+							<div className='grid grid-cols-2 gap-3'>
+								<button
+									type='button'
+									className={`py-2 px-3 rounded-lg text-sm font-medium border transition-all ${
+										formData.role === "customer"
+											? "bg-emerald-600 border-emerald-500 text-white shadow-lg"
+											: "bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-650"
+									}`}
+									onClick={() => setFormData({ ...formData, role: "customer" })}
+								>
+									🛒 Customer
+								</button>
+								<button
+									type='button'
+									className={`py-2 px-3 rounded-lg text-sm font-medium border transition-all ${
+										formData.role === "supplier"
+											? "bg-emerald-600 border-emerald-500 text-white shadow-lg"
+											: "bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-650"
+									}`}
+									onClick={() => setFormData({ ...formData, role: "supplier" })}
+								>
+									🏭 Supplier / Partner
+								</button>
+							</div>
+						</div>
+
+						{formData.role === "supplier" && (
+							<div>
+								<label htmlFor='supplierCompany' className='block text-sm font-medium text-gray-300'>
+									Company / Brand Name
+								</label>
+								<div className='mt-1 relative rounded-md shadow-sm'>
+									<input
+										id='supplierCompany'
+										type='text'
+										required
+										value={formData.supplierCompany}
+										onChange={(e) => setFormData({ ...formData, supplierCompany: e.target.value })}
+										className='block w-full px-3 py-2 bg-gray-700 border border-emerald-600 rounded-md shadow-sm
+										 text-white placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm'
+										placeholder='Priyanka Fashion Labs'
+									/>
+								</div>
+							</div>
+						)}
 						<div>
 							<label htmlFor='name' className='block text-sm font-medium text-gray-300'>
 								Full name

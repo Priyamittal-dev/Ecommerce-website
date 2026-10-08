@@ -1,4 +1,4 @@
-import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
+import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Building, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 import { useCartStore } from "../stores/useCartStore";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
 	const { user, logout } = useUserStore();
 	const isAdmin = user?.role === "admin";
+	const isSupplier = user?.role === "supplier" || isAdmin;
 	const { cart } = useCartStore();
 	const navigate = useNavigate();
 
@@ -18,40 +19,48 @@ const Navbar = () => {
 						Priyanka's Closet
 					</Link>
 
-					<nav className='flex flex-wrap items-center gap-4'>
+					<nav className='flex flex-wrap items-center gap-3'>
 						<Link
 							to={"/"}
-							className='text-gray-300 hover:text-emerald-400 transition duration-300
-					 ease-in-out'
+							className='text-gray-300 hover:text-emerald-400 transition duration-300 ease-in-out font-medium'
 						>
 							Home
 						</Link>
 						{user && (
 							<Link
 								to={"/cart"}
-								className='relative group text-gray-300 hover:text-emerald-400 transition duration-300 
-							ease-in-out'
+								className='relative group text-gray-300 hover:text-emerald-400 transition duration-300 ease-in-out font-medium'
 							>
 								<ShoppingCart className='inline-block mr-1 group-hover:text-emerald-400' size={20} />
 								<span className='hidden sm:inline'>Cart</span>
-								{cart.length > 0 && (
+								{(cart?.length || 0) > 0 && (
 									<span
 										className='absolute -top-2 -left-2 bg-emerald-500 text-white rounded-full px-2 py-0.5 
-									text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out'
+									text-xs group-hover:bg-emerald-400 transition duration-300 ease-in-out font-bold'
 									>
 										{cart.length}
 									</span>
 								)}
 							</Link>
 						)}
+						{isSupplier && (
+							<Link
+								className='bg-emerald-800 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-medium
+								 transition duration-300 ease-in-out flex items-center shadow-md'
+								to={"/supplier-portal"}
+							>
+								<Building className='inline-block mr-1.5' size={18} />
+								<span className='hidden sm:inline'>Supplier Portal</span>
+							</Link>
+						)}
 						{isAdmin && (
 							<Link
-								className='bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded-md font-medium
-								 transition duration-300 ease-in-out flex items-center'
+								className='bg-purple-900 hover:bg-purple-800 text-white px-3 py-1.5 rounded-lg font-medium
+								 transition duration-300 ease-in-out flex items-center shadow-md border border-purple-700'
 								to={"/secret-dashboard"}
 							>
-								<Lock className='inline-block mr-1' size={18} />
-								<span className='hidden sm:inline'>Dashboard</span>
+								<Lock className='inline-block mr-1.5' size={18} />
+								<span className='hidden sm:inline'>Admin Dashboard</span>
 							</Link>
 						)}
 
