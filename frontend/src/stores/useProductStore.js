@@ -82,9 +82,9 @@ export const useProductStore = create((set) => ({
 		set({ loading: true });
 		try {
 			const response = await axios.get("/products/featured");
-			set({ products: response.data, loading: false });
+			set({ products: Array.isArray(response.data) ? response.data : [], loading: false });
 		} catch (error) {
-			set({ error: "Failed to fetch products", loading: false });
+			set({ products: [], error: "Failed to fetch products", loading: false });
 			console.log("Error fetching featured products:", error);
 		}
 	},
@@ -93,14 +93,14 @@ export const useProductStore = create((set) => ({
 		try {
 			const response = await axios.put(`/products/${productId}`, productData);
 			set((prevProducts) => ({
-				products: prevProducts.products.map((product) =>
+				products: (Array.isArray(prevProducts.products) ? prevProducts.products : []).map((product) =>
 					product._id === productId ? { ...product, ...response.data } : product
 				),
 				loading: false,
 			}));
 		} catch (error) {
 			set({ loading: false });
-			toast.error(error.response.data.error || "Failed to update product");
+			toast.error(error.response?.data?.error || error.response?.data?.message || "Failed to update product");
 		}
 	}
 }));
