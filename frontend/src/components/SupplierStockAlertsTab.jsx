@@ -18,7 +18,7 @@ const SupplierStockAlertsTab = () => {
 					<AlertTriangle className="h-6 w-6" /> Inventory & Stock Alerts
 				</h2>
 				<p className="text-gray-400 text-sm mt-1">
-					Products highlighted below are running low on stock (< 15 items remaining). Restock promptly to prevent out-of-stock cancellations.
+					Products highlighted below are running low on stock (&lt; 15 items remaining). Restock promptly to prevent out-of-stock cancellations.
 				</p>
 			</div>
 
